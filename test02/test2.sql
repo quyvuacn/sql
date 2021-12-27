@@ -26,17 +26,12 @@ CREATE TABLE Utilities(
 )
 GO
 
-CREATE TABLE Utiliti_Wifi(
-	UtilitiId INT FOREIGN KEY REFERENCES Utilities(UtilitiId) DEFAULT(0),
-	StoreId INT FOREIGN KEY REFERENCES Stores(StoreId) UNIQUE
+CREATE TABLE Utiliti_Active(
+	UtilitiId INT FOREIGN KEY REFERENCES Utilities(UtilitiId),
+	StoreId INT FOREIGN KEY REFERENCES Stores(StoreId)
 )
 GO
 
-CREATE TABLE Utiliti_Card(
-	UtilitiId INT FOREIGN KEY REFERENCES Utilities(UtilitiId) DEFAULT(1),
-	StoreId INT FOREIGN KEY REFERENCES Stores(StoreId) UNIQUE
-)
-GO
 
 INSERT INTO City (CityId,CityName)
 VALUES
@@ -139,64 +134,55 @@ VALUES
     N'Thanh toán bằng thẻ' -- UtilitiName - nvarchar(200)
     )
 GO
-
-INSERT INTO Utiliti_Wifi
+INSERT INTO dbo.Utiliti_Active
 (
     UtilitiId,
     StoreId
 )
 VALUES
-	(0, -- UtilitiId - int
+(   0, -- UtilitiId - int
     1  -- StoreId - int
     ),
-	(0, -- UtilitiId - int
+(   0, -- UtilitiId - int
     2  -- StoreId - int
     ),
-	(0, -- UtilitiId - int
-    3 -- StoreId - int
+(   0, -- UtilitiId - int
+    3  -- StoreId - int
+    ),
+(   0, -- UtilitiId - int
+    4  -- StoreId - int
+    ),
+(   0, -- UtilitiId - int
+    5  -- StoreId - int
+    ),
+(   1, -- UtilitiId - int
+    1  -- StoreId - int
+    ),
+(   1, -- UtilitiId - int
+    2  -- StoreId - int
+    ),
+(   1, -- UtilitiId - int
+    3  -- StoreId - int
     )
 GO
 
-INSERT INTO Utiliti_Card
-(
-    UtilitiId,
-    StoreId
-)
-VALUES
-	(1, -- UtilitiId - int
-    2  -- StoreId - int
-    ),
-	(1, -- UtilitiId - int
-    3  -- StoreId - int
-    ),
-	(1, -- UtilitiId - int
-    4  -- StoreId - int
-    )
---Truy vấn tên tỉnh
-SELECT CityName FROM City 
-	WHERE CityName LIKE N'Ninh %'
---Truy vấn tên của huyện
-SELECT City.CityName,District.DistrictName
-FROM City 
-JOIN District 
-ON City.CityId = District.CityId
-WHERE District.DistrictName LIKE 'Thái%'
---Truy vấn tên quán
-SELECT City.CityName,District.DistrictName,Stores.StoreName
-FROM City 
+--Truy vấn quán cà phê
+SELECT City.CityName,District.DistrictName,Stores.StoreName,COUNT(Utiliti_Active.UtilitiId) AS	N'Dịch vụ thỏa mãn'
+FROM City
 JOIN District 
 ON City.CityId = District.CityId
 JOIN Stores
 ON Stores.DistrictId = District.DistrictId
-WHERE Stores.StoreName LIKE N'Bl%'
+JOIN dbo.Utiliti_Active
+ON Utiliti_Active.StoreId = Stores.StoreId
+WHERE City.CityName LIKE N'Thái Bình%' AND District.DistrictName LIKE N'%' AND Stores.StoreName LIKE N'Bl%' 
+AND dbo.Utiliti_Active.UtilitiId IN(0,1) --Truy vấn dịch vụ theo lựa chọn
+GROUP BY City.CityName,District.DistrictName,Stores.StoreName
 
 
 
 
-
-
-
-
-
-
-	
+--Các quán ở 1 tỉnh : ...N'Thái Bình%'...N'%'...N'%'
+--Các quán ở 1 huyện : ...N'Thái Bình%' ...N'Thái Thụy%' ...N'%'
+--Quán cụ thể : ...N'Thái Bình%' ...N'Thái Thụy%' ...N'Black%'
+--IN(0,1) là các lựa chọn dịch vụ mà quán có thể cung cấp 0 là có wifi, 1 là có thanh toán bằng thẻ
