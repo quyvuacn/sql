@@ -183,4 +183,4 @@ GROUP BY City.CityName,District.DistrictName,Stores.StoreName
 --Các quán ở 1 tỉnh : ...N'Thái Bình%'...N'%'...N'%'
 --Các quán ở 1 huyện : ...N'Thái Bình%' ...N'Thái Thụy%' ...N'%'
 --Quán cụ thể : ...N'Thái Bình%' ...N'Thái Thụy%' ...N'Black%'
---IN(0,1) là các lựa chọn dịch vụ mà quán có thể cung cấp 0 là có wifi, 1 là có thanh toán bằng thể
+--IN(0,1) là các lựa chọn dịch vụ mà quán có thể cung cấp 0 là có wifi, 1 là có thanh toán bằng thể vd IN(0) IN(1) IN(0,1)
