@@ -188,7 +188,7 @@ JOIN District
 ON City.CityId = District.CityId
 JOIN Stores
 ON Stores.DistrictId = District.DistrictId
-WHERE Stores.StoreName LIKE N'Bl%'
+WHERE City.CityName=N'Thái Bình' AND District.DistrictName=N'Thái Thụy' and Stores.StoreName LIKE N'Bl%' 
 
 
 
