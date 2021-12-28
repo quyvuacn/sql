@@ -1,0 +1,4 @@
+use AdventureWorks2014
+select ProductModelID,Name into Production.ProductName
+from Production.ProductModel
+go
