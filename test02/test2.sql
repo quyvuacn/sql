@@ -173,18 +173,13 @@ JOIN District
 ON City.CityId = District.CityId
 JOIN Stores
 ON Stores.DistrictId = District.DistrictId
-<<<<<<< HEAD
 JOIN dbo.Utiliti_Active
 ON Utiliti_Active.StoreId = Stores.StoreId
 WHERE City.CityName LIKE N'Thái Bình%' AND District.DistrictName LIKE N'%' AND Stores.StoreName LIKE N'Bl%' 
 AND dbo.Utiliti_Active.UtilitiId IN(0,1) --Truy vấn dịch vụ theo lựa chọn
 GROUP BY City.CityName,District.DistrictName,Stores.StoreName
 
-WHERE City.CityName=N'Thái Bình' AND District.DistrictName=N'Thái Thụy' and Stores.StoreName LIKE N'Bl%' 
-
-
-
 --Các quán ở 1 tỉnh : ...N'Thái Bình%'...N'%'...N'%'
 --Các quán ở 1 huyện : ...N'Thái Bình%' ...N'Thái Thụy%' ...N'%'
 --Quán cụ thể : ...N'Thái Bình%' ...N'Thái Thụy%' ...N'Black%'
---IN(0,1) là các lựa chọn dịch vụ mà quán có thể cung cấp 0 là có wifi, 1 là có thanh toán bằng thẻ
+--IN(0,1) là các lựa chọn dịch vụ mà quán có thể cung cấp 0 là có wifi, 1 là có thanh toán bằng thể vd IN(0) IN(1) IN(0,1)
