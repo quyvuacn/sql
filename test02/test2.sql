@@ -179,16 +179,8 @@ ON Utiliti_Active.StoreId = Stores.StoreId
 WHERE City.CityName LIKE N'Thái Bình%' AND District.DistrictName LIKE N'%' AND Stores.StoreName LIKE N'Bl%' 
 AND dbo.Utiliti_Active.UtilitiId IN(0,1) --Truy vấn dịch vụ theo lựa chọn
 GROUP BY City.CityName,District.DistrictName,Stores.StoreName
-=======
+
 WHERE City.CityName=N'Thái Bình' AND District.DistrictName=N'Thái Thụy' and Stores.StoreName LIKE N'Bl%' 
-
-
-
-
-
-
->>>>>>> 71ea070850f9d4e67ff57669747726da93c53dd6
-
 
 
 
