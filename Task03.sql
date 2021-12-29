@@ -21,7 +21,7 @@ GO
 CREATE TABLE Inf_Class(
 	StudentID INT FOREIGN KEY REFERENCES Student(ID),
 	ClassId INT FOREIGN KEY REFERENCES Class(ClassId),	
-	Status NVARCHAR(500) NOT NULL, -- Lớp học chính,Đang theo học,Đã hoàn thành,Bảo lưu kết quả
+	Status INT NOT NULL, --1: Lớp học chính,2: Đang theo học,3: Đã hoàn thành,4: Bảo lưu kết quả
 	Admission DATE NOT NULL, --Ngày nhập học
 	Finish DATE DEFAULT(NULL)
 )
@@ -38,7 +38,7 @@ CREATE TABLE Inf_Subjects(
 	SubjectID INT FOREIGN KEY REFERENCES Subjects(SubjectID),
 	Admission DATE NOT NULL, --Ngày bắt đầu học phần
 	Finish DATE DEFAULT(NULL), --Ngày hoàn thành
-	Status NVARCHAR(500) NOT NULL, -- Đang học,Trượt,Đang Học lại,Hoàn thành
+	Status INT NOT NULL, -- 1: Đang học,0 : Trượt,2 : Đang Học lại, 11 : Hoàn thành
 )
 
 INSERT INTO dbo.Class
@@ -95,31 +95,31 @@ INSERT INTO dbo.Inf_Class
 VALUES
 (	1,         -- StudentID - int
     1,         -- ClassId - int
-    N'Đang học',       -- Status - nvarchar(500)
+    1,       -- Status - nvarchar(500)
     '20210920', -- Admission - date
     NULL  -- Finish - date
     ),
 (	1,         -- StudentID - int
     1,         -- ClassId - int
-    N'Đang học',       -- Status - nvarchar(500)
+    1,       -- Status - nvarchar(500)
     '20210920', -- Admission - date
     NULL  -- Finish - date
     ),
 (	2,         -- StudentID - int
     1,         -- ClassId - int
-    N'Đang học',       -- Status - nvarchar(500)
+    1,       -- Status - nvarchar(500)
     '20210920', -- Admission - date
     NULL  -- Finish - date
     ),
 (	3,         -- StudentID - int
     1,         -- ClassId - int
-    N'Đang học',       -- Status - nvarchar(500)
+    1,       -- Status - nvarchar(500)
     '20210920', -- Admission - date
     NULL  -- Finish - date
     ),
 (	5,         -- StudentID - int
     1,         -- ClassId - int
-    N'Đang học',       -- Status - nvarchar(500)
+    1,       -- Status - nvarchar(500)
     '20210920', -- Admission - date
     NULL  -- Finish - date
     )
@@ -151,49 +151,49 @@ VALUES
     1,         -- SubjectID - int
    '20210922', -- Admission - date
     '20211012', -- Finish - date
-    N'Hoàn thành'        -- Status - nvarchar(500)
+    11        -- Status - nvarchar(500)
     ),
 (   1,         -- StudentID - int
     2,         -- SubjectID - int
    '20210922', -- Admission - date
     '20211012', -- Finish - date
-    N'Hoàn thành'        -- Status - nvarchar(500)
+    11        -- Status - nvarchar(500)
     ),
 (   1,         -- StudentID - int
     3,         -- SubjectID - int
    '20210922', -- Admission - date
     '20211012', -- Finish - date
-    N'Hoàn thành'        -- Status - nvarchar(500)
+    11        -- Status - nvarchar(500)
     ),
 (   1,         -- StudentID - int
     4,         -- SubjectID - int
    '20210922', -- Admission - date
     NULL, -- Finish - date
-    N'Đang học'        -- Status - nvarchar(500)
+    1        -- Status - nvarchar(500)
     ),
 (   2,         -- StudentID - int
     1,         -- SubjectID - int
    '20210922', -- Admission - date
     '20211012', -- Finish - date
-    N'Hoàn thành'        -- Status - nvarchar(500)
+    11        -- Status - nvarchar(500)
     ),
 (   2,         -- StudentID - int
     2,         -- SubjectID - int
    '20210922', -- Admission - date
     '20211012', -- Finish - date
-    N'Hoàn thành'        -- Status - nvarchar(500)
+    11        -- Status - nvarchar(500)
     ),
 (   2,         -- StudentID - int
     3,         -- SubjectID - int
    '20210922', -- Admission - date
     '20211012', -- Finish - date
-    N'Hoàn thành'        -- Status - nvarchar(500)
+    11        -- Status - nvarchar(500)
     ),
 (   2,         -- StudentID - int
     4,         -- SubjectID - int
    '20210922', -- Admission - date
     NULL, -- Finish - date
-    N'Đang học'        -- Status - nvarchar(500)
+    1        -- Status - nvarchar(500)
     )
 
 
