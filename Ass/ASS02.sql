@@ -1,7 +1,7 @@
-﻿CREATE DATABASE ASS01 -- Cơ sở dữ liệu lưu trữ sản phẩm theo hãng
+﻿CREATE DATABASE ASS02 -- Cơ sở dữ liệu lưu trữ sản phẩm theo hãng
 GO
 
-USE ASS01
+USE ASS02
 GO
 
 CREATE  TABLE Trademark(
