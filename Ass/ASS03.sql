@@ -108,8 +108,4 @@ ALTER TABLE dbo.SoThueBao
 ALTER TABLE dbo.SoThueBao
 	ADD CHECK(LEFT(SoTB,2)='03' OR LEFT(SoTB,2)='09')
 
-	
-	
-	
-
 --
