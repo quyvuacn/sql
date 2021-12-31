@@ -121,4 +121,11 @@ SELECT * FROM dbo.SanPham
 WHERE MaSP = 1
 
 --5d. Liệt kê sản phẩm Vũ Viết Quý chịu trách nhiệm
-SELECT * FROM 
+SELECT TenSP FROM dbo.SanPham
+JOIN dbo.PhuTrach
+ON PhuTrach.MaSP = SanPham.MaSP 
+WHERE NVPhuTrach =(
+	SELECT MaNV FROM dbo.NhanVien
+	WHERE TenNV = N'Vũ Viết Quý'
+)
+
