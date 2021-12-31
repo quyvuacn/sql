@@ -12,8 +12,16 @@ CREATE  TABLE Trademark(
 )
 GO
 
+CREATE TABLE Product_type(
+	TypeID INT IDENTITY PRIMARY KEY,
+	TypeName NVARCHAR(20) NOT NULL UNIQUE, --VD: Máy Tính,Điện thoại,Máy in
+)
+GO
+
+
 CREATE TABLE Product(
-	TrademarkID INT FOREIGN KEY REFERENCES Trademark(TrademarkID),
+	TrademarkID INT NOT NULL FOREIGN KEY REFERENCES dbo.Trademark(TrademarkID),
+	TypeID INT FOREIGN KEY REFERENCES dbo.Product_type(TypeID),
 	ProductID INT IDENTITY PRIMARY KEY,
 	ProductName NVARCHAR(200) NOT NULL,
 	Status NVARCHAR(100) NOT NULL, --Chất lượng? Độ hot
@@ -23,47 +31,6 @@ CREATE TABLE Product(
 )
 GO
 
-
-INSERT INTO dbo.Trademark
-(
-    TrademarkName,
-    Address,
-    Tel
-)
-VALUES
-(   N'Asus', -- TrademarkName - nvarchar(100)
-    N'USA', -- Address - nvarchar(20)
-    N'983232'  -- Tel - nchar(20)
-    ),
-(   N'Apple', -- TrademarkName - nvarchar(100)
-    N'USA', -- Address - nvarchar(20)
-    N'012345'  -- Tel - nchar(20)
-    ),
-(   N'Xiaomi', -- TrademarkName - nvarchar(100)
-    N'CHINA', -- Address - nvarchar(20)
-    N'036458'  -- Tel - nchar(20)
-    )
-	CREATE DATABASE ASS01 -- Cơ sở dữ liệu lưu trữ sản phẩm theo hãng
-GO
-
-CREATE  TABLE Trademark(
-	TrademarkID INT IDENTITY PRIMARY KEY,
-	TrademarkName NVARCHAR(100) NOT NULL,
-	Address NVARCHAR(20) NOT NULL,
-	Tel NCHAR(20) NOT NULL CHECK(ISNUMERIC(Tel) = 1),
-)
-GO
-
-CREATE TABLE Product(
-	TrademarkID INT FOREIGN KEY REFERENCES Trademark(TrademarkID),
-	ProductID INT IDENTITY PRIMARY KEY,
-	ProductName NVARCHAR(200) NOT NULL,
-	Status NVARCHAR(100) NOT NULL, --Chất lượng? Độ hot
-	Unit NVARCHAR(20) NOT NULL , -- Đơn vị: chiếc,lô,...
-	Price MONEY NOT NULL CHECK(Price>0),
-	Quantily INT NOT NULL CHECK(Quantily>0),
-)
-GO
 
 INSERT INTO dbo.Trademark
 (
@@ -84,9 +51,25 @@ VALUES
     N'CHINA', -- Address - nvarchar(20)
     N'036458'  -- Tel - nchar(20)
     )
-INSERT INTO dbo.Product
+
+
+INSERT INTO dbo.Product_type
 (
-    TrademarkID,
+    TypeName  
+)
+VALUES
+(   N'Máy Tính'-- TypeName - nvarchar(20)
+   ),
+(   N'Điện Thoại'-- TypeName - nvarchar(20)
+   ),
+(   N'Máy in'-- TypeName - nvarchar(20)
+   ),
+(   N'Phụ kiện'-- TypeName - nvarchar(20)
+   )
+
+INSERT INTO dbo.Product
+(	TrademarkID,
+    TypeID,
     ProductName,
     Status,
     Unit,
@@ -95,30 +78,18 @@ INSERT INTO dbo.Product
 )
 VALUES
 (   1,
-	N'Máy tính T450',  -- ProductName - nvarchar(200)
-    N'Máy nhập cũ',  -- Status - nvarchar(100)
+	1,    -- TypeID - int
+    N'Máy tính Asus',  -- ProductName - nvarchar(200)
+    N'Hàng mới',  -- Status - nvarchar(100)
     N'Chiếc',  -- Unit - nvarchar(20)
-    1000, -- Price - money
-    10     -- Quantily - int
-    ),
-(   1,
-	N'Điện thoại Nokia5670',  -- ProductName - nvarchar(200)
-    N'Điện thoại đang hot',  -- Status - nvarchar(100)
-    N'Chiếc',  -- Unit - nvarchar(20)
-    200, -- Price - money
-    200     -- Quantily - int
-    ),
-(   1,
-	N'Máy in Asus',  -- ProductName - nvarchar(200)
-    N'Máy nhập mới',  -- Status - nvarchar(100)
-    N'Chiếc',  -- Unit - nvarchar(20)
-    1000, -- Price - money
-    100     -- Quantily - int
+    1500, -- Price - money
+    20     -- Quantily - int
     )
 
 --4: Hiển thị các hãng và các sp
 SELECT TrademarkName FROM dbo.Trademark
-SELECT ProductName FROM dbo.Product
+SELECT * FROM dbo.Product_type
+SELECT * FROM dbo.Product
 
 --5a.Liệt kê danh sách hãng z-a
 SELECT TrademarkName FROM dbo.Trademark
@@ -138,10 +109,7 @@ WHERE Quantily<11
 
 --5e.Liệt kê danh sách sản phẩm của hãng Asus
 SELECT * FROM dbo.Product
-WHERE TrademarkID = (
-	SELECT TrademarkID FROM dbo.Trademark
-	WHERE TrademarkName = 'Asus'
-)
+
 
 --6a. Hiển thị số hãng sp mà cửa hàng có
 SELECT COUNT(TrademarkID) AS 'Số hãng' FROM dbo.Trademark
