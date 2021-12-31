@@ -21,3 +21,15 @@ CREATE TABLE SoThueBao(
 )
 GO
 
+INSERT INTO dbo.ThueBao
+(
+    TenTB,
+    SCMT,
+    Diachi
+)
+VALUES
+(   N'Vũ Viết Quý', -- TenTB - nvarchar(100)
+    '034203004985',  -- SCMT - char(20)
+    N'Thái Thụy,Thái Bình'  -- Diachi - nvarchar(200)
+    )
+
