@@ -25,7 +25,8 @@ GO
 
 CREATE TABLE PhuTrach(
 	MaSP INT FOREIGN KEY REFERENCES SanPham(MaSP),
-	NVPhuTrach INT FOREIGN KEY REFERENCES dbo.NhanVien(MaNV)
+	NVPhuTrach INT FOREIGN KEY REFERENCES dbo.NhanVien(MaNV),
+	NSX DATE
 )
 GO
 
@@ -129,3 +130,26 @@ WHERE NVPhuTrach =(
 	WHERE TenNV = N'Vũ Viết Quý'
 )
 
+--6a. Số sp từng loại
+SELECT MaLoaiSP,COUNT(MaSP) AS 'Số SP' FROM dbo.SanPham
+GROUP BY MaLoaiSP
+
+--6c. Hiển thị toàn bộ thông tin sản phẩm
+SELECT TenSP,TenLoaiSP FROM dbo.SanPham
+JOIN dbo.LoaiSP
+ON LoaiSP.MaloaiSP = SanPham.MaLoaiSP
+
+--6d. Hiển thị thông tin về người chịu trách nhiệm, lsp và sp
+SELECT TenNV,TenSP,MaLoaiSP FROM dbo.SanPham
+JOIN dbo.PhuTrach
+ON PhuTrach.MaSP = SanPham.MaSP
+JOIN dbo.NhanVien 
+ON MaNV = NVPhuTrach
+ORDER BY TenNV
+
+--7a. NSX <= ngày hiện tại
+ALTER TABLE dbo.PhuTrach
+	ADD CHECK(NSX<=GETDATE())
+--7c.Thêm trường phiên bản của SP
+ALTER TABLE dbo.SanPham 
+	ADD PhienBan INT 
