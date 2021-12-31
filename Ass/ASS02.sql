@@ -163,6 +163,7 @@ SELECT SUM(Quantily) AS 'Số đầu sản phẩm' FROM dbo.Product
 ALTER TABLE dbo.Trademark
  ADD CONSTRAINT ck_tel CHECK(LEFT(Tel,1)='0')
 
+ --8: Chưa học tới
 
 
 
