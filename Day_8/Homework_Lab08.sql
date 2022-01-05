@@ -38,6 +38,9 @@ CREATE NONCLUSTERED INDEX IX_Student ON dbo.Student(StudentNo)
 GO
 
 
+CREATE NONCLUSTERED INDEX IX_Dept ON dbo.Department(DeptNo,DeptName,ManagerName)
+GO
+
 
 
 
