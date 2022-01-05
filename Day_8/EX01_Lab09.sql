@@ -183,7 +183,7 @@ AS
 SELECT BookSold.CustomerID,CustumerName,Address,SUM(Amount) AS Amount FROM dbo.Customer
 JOIN dbo.BookSold
 ON BookSold.CustomerID = Customer.CustomerID
-WHERE Date = MONTH(GETDATE()) - 1
+WHERE DATEDIFF(MONTH, Date,GETDATE()) = 1
 GROUP BY BookSold.CustomerID,CustumerName,Address
 
 SELECT * FROM CustomerMonth
