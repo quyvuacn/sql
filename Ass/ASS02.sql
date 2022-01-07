@@ -131,7 +131,32 @@ SELECT SUM(Quantily) AS 'Số đầu sản phẩm' FROM dbo.Product
 ALTER TABLE dbo.Trademark
  ADD CONSTRAINT ck_tel CHECK(LEFT(Tel,1)='0')
 
- --8: Chưa học tới
+ --8a: Thiết lập index
+CREATE INDEX IX_Product ON dbo.Product(ProductName)
+GO
+
+CREATE INDEX IX_ProductStatus ON dbo.Product(Status)
+GO
+
+--8b. View
+CREATE VIEW View_SanPham
+AS 
+SELECT ProductID,ProductName,Price FROM dbo.Product
+GO
+
+--8c. 
+CREATE VIEW View_SanPham
+AS
+SELECT TrademarkName,ProductName FROM dbo.Product
+JOIN dbo.Trademark 
+ON Trademark.TrademarkID = Product.TrademarkID
+GO
+
+
+
+
+
+
 
 
 
