@@ -268,3 +268,32 @@ GO
 ALTER TABLE dbo.Product 
 	ADD PublicDate DATETIME
 GO
+
+--8.a Đặt chỉ mục index cho tên hàng và người đặt hàng
+CREATE INDEX IX_Product ON dbo.Product(Name)
+GO
+
+CREATE INDEX IX_Orderer ON dbo.Customer(CustomerName)
+GO
+
+--8.b Xây dựng các view
+CREATE VIEW View_KhachHang
+AS
+SELECT CustomerName,Address,Tel FROM dbo.Customer
+GO
+
+CREATE VIEW View_SanPham
+AS
+SELECT Name,Price FROM dbo.Product
+GO
+
+
+CREATE VIEW View_KhachHang_SanPham
+AS 
+SELECT CustomerName,Tel,Name,OrderDetails.Quantity,OrderDate FROM dbo.Customer
+JOIN dbo.ProductOrder
+ON ProductOrder.CustomerID = Customer.CustomerID
+JOIN dbo.OrderDetails
+ON OrderDetails.OrderID = ProductOrder.OrderID
+JOIN dbo.Product
+ON Product.ProductID = OrderDetails.ProductID
