@@ -153,3 +153,27 @@ ALTER TABLE dbo.PhuTrach
 --7c.Thêm trường phiên bản của SP
 ALTER TABLE dbo.SanPham 
 	ADD PhienBan INT 
+
+--8a. index
+CREATE INDEX IX_NguoiCTN ON dbo.NhanVien(TenNV)
+GO
+
+--8b. View
+CREATE VIEW View_SanPham
+AS
+SELECT TenSP,TenLoaiSP FROM dbo.SanPham
+JOIN dbo.LoaiSP
+ON LoaiSP.MaloaiSP = SanPham.MaLoaiSP
+GO
+
+CREATE VIEW View_SanPham_NCTN
+AS
+SELECT PhuTrach.MaSP,TenSP,NSX,TenNV FROM dbo.NhanVien
+JOIN dbo.PhuTrach
+ON PhuTrach.NVPhuTrach = NhanVien.MaNV
+JOIN dbo.SanPham
+ON SanPham.MaSP = PhuTrach.MaSP
+GO
+
+
+
