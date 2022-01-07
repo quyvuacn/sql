@@ -108,4 +108,41 @@ ALTER TABLE dbo.SoThueBao
 ALTER TABLE dbo.SoThueBao
 	ADD CHECK(LEFT(SoTB,2)='03' OR LEFT(SoTB,2)='09')
 
---
+--8a: Đặt index
+CREATE INDEX IX_Customer ON ThueBao(TenTB)
+GO
+
+--8b: View
+CREATE VIEW View_KhachHang
+AS 
+SELECT * FROM dbo.ThueBao
+GO
+
+CREATE VIEW View_KhachHang_ThueBao
+AS 
+SELECT SoThueBao.MaTB,TenTB,SoTB FROM dbo.ThueBao
+JOIN dbo.SoThueBao
+ON SoThueBao.MaTB = ThueBao.MaTB
+GO
+
+--8c:
+CREATE VIEW SP_TimKH_ThueBao
+AS 
+SELECT * FROM dbo.ThueBao
+WHERE MaTB = (
+SELECT MaTB FROM dbo.SoThueBao
+WHERE SoTB = '0326459773'
+)
+GO
+
+
+CREATE VIEW SP_TimTB_KhachHang
+AS 
+SELECT * FROM dbo.SoThueBao
+WHERE MaTB = (
+SELECT MaTB FROM dbo.ThueBao
+WHERE TenTB = 'Vũ Viết Quý'
+)
+
+
+
