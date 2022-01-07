@@ -93,3 +93,25 @@ ALTER TABLE dbo.Info
 --7b. Viết câu lênh để thêm trường ngày bắt đầu liên lạc
 ALTER TABLE dbo.Tel
 	ADD Contact  DATE 
+
+--8a: index
+CREATE INDEX IX_HoTen ON dbo.Info(Name)
+GO
+
+CREATE INDEX IX_SoDienThoai ON dbo.Tel(Tel)
+GO
+
+--8.b View
+CREATE VIEW View_SoDienThoai
+AS 
+SELECT Name,Tel FROM dbo.Tel
+JOIN dbo.Info
+ON Info.UID = Tel.UID
+GO
+
+CREATE VIEW View_SinhNhat
+AS
+SELECT Name,DateOfBirth,Tel FROM dbo.Info
+JOIN dbo.Tel
+ON Tel.UID = Info.UID
+GO
