@@ -195,3 +195,21 @@ JOIN dbo.LoaiSach
 ON LoaiSach.Ma_Loai = ThongTinSach.Ma_Loai
 GROUP BY LoaiSach
 
+--16. Đặt index
+CREATE INDEX IX_Tensach ON ThongTinSach(TenSach)
+GO
+--17:View
+CREATE VIEW View_Sach
+AS 
+SELECT Ma_Sach,TenTG,NXB,Gia FROM dbo.TacGia
+JOIN dbo.ThongTinSach
+ON dbo.TacGia.Ma_TG = ThongTinSach.Ma_TG
+JOIN dbo.NXB
+ON NXB.Ma_NXB = dbo.ThongTinSach.Ma_NXB
+GO
+
+
+
+
+
+

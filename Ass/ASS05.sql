@@ -115,3 +115,5 @@ SELECT Name,DateOfBirth,Tel FROM dbo.Info
 JOIN dbo.Tel
 ON Tel.UID = Info.UID
 GO
+
+
