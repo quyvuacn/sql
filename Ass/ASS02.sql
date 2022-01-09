@@ -171,10 +171,9 @@ GO
 
 --SP_SanPham_HetHang:
 CREATE PROCEDURE SP_SanPham_HetHang 
-	@quantity INT = 0
 AS 
 SELECT * FROM dbo.Product
-WHERE Quantily =@quantity
+WHERE Quantily =0
 GO
 
 EXECUTE dbo.SP_SanPham_HetHang 
