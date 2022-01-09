@@ -32,3 +32,6 @@ EXEC dbo.sp_insert_NhanVien @TenNV = N'Vũ Viết Quý',             -- nvarchar
                             @NgaySinh = '2022-01-09' -- date
               
 SELECT * FROM dbo.NhanVien
+
+GO
+
