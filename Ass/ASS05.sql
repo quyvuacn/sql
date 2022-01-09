@@ -116,4 +116,39 @@ JOIN dbo.Tel
 ON Tel.UID = Info.UID
 GO
 
+--8c
+--SP_Them_DanhBa: Thêm một người mới vào danh bạn
+CREATE PROCEDURE SP_Them_DanhBa
+	@Name NVARCHAR(100),
+	@DateOfBirth DATE,
+	@Tel CHAR(15)
+AS 
+BEGIN
+	IF (@UID IS NOT NULL AND @Name IS NOT NULL AND @Tel IS NOT NULL)
+	BEGIN
+	INSERT INTO dbo.Info
+	(
+	    Name,
+	    DateOfBirth
+	)
+	VALUES
+	(  @Name,      -- Name - nvarchar(100)
+	    @DateOfBirth -- DateOfBirth - date
+	    )
+	INSERT INTO dbo.Tel
+	(
+	    UID,
+	    Tel,
+	    Contact
+	)
+	VALUES
+	(   0,        -- UID - int
+	    '',       -- Tel - char(10)
+	    GETDATE() -- Contact - date
+	    )
+
+	END
+
+
+END
 

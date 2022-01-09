@@ -144,13 +144,49 @@ AS
 SELECT ProductID,ProductName,Price FROM dbo.Product
 GO
 
---8c. 
-CREATE VIEW View_SanPham
-AS
-SELECT TrademarkName,ProductName FROM dbo.Product
-JOIN dbo.Trademark 
+--8c. Viết các Store Procedure sau:
+--SP_SanPham_TenHang: Liệt kê các sản phẩm với tên hãng truyền vào store
+CREATE PROCEDURE SP_SanPham_TenHang
+	@TrademarkName NVARCHAR(100)
+AS 
+SELECT ProductName FROM dbo.Product
+JOIN dbo.Trademark
 ON Trademark.TrademarkID = Product.TrademarkID
+WHERE TrademarkName LIKE @TrademarkName
 GO
+
+EXECUTE dbo.SP_SanPham_TenHang @TrademarkName = N'asus' -- nvarchar(100)
+GO
+
+--SP_SanPham_Gia: Liệt kê các sản phẩm có giá bán lớn hơn hoặc bằng giá bán truyền vào
+CREATE PROCEDURE SP_SanPham_Gia
+	@input_price MONEY
+AS
+SELECT * FROM dbo.Product
+WHERE Price > @input_price
+GO
+
+EXECUTE dbo.SP_SanPham_Gia @input_price = 100 -- money
+GO
+
+--SP_SanPham_HetHang:
+CREATE PROCEDURE SP_SanPham_HetHang 
+	@quantity INT = 0
+AS 
+SELECT * FROM dbo.Product
+WHERE Quantily =@quantity
+GO
+
+EXECUTE dbo.SP_SanPham_HetHang 
+GO
+
+
+
+
+
+
+
+
 
 
 

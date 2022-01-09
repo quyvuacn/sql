@@ -125,24 +125,83 @@ JOIN dbo.SoThueBao
 ON SoThueBao.MaTB = ThueBao.MaTB
 GO
 
---8c:
-CREATE VIEW SP_TimKH_ThueBao
+
+
+--8c.Viết các Store Procedure sau:
+--SP_TimKH_ThueBao: Hiển thị thông tin của khách hàng với số thuê bao nhập vào vào store
+CREATE PROCEDURE SP_TimKH_ThueBao
+	@SoTB CHAR(15) 
+AS
+SELECT SoTB,TenTB,SCMT,Diachi FROM dbo.ThueBao
+JOIN dbo.SoThueBao
+ON SoThueBao.MaTB = ThueBao.MaTB
+WHERE SoTB = @SoTB
+GO
+
+EXECUTE dbo.SP_TimKH_ThueBao @SoTB = '0326459773' 
+GO
+
+--SP_TimTB_KhachHang: Liệt kê các số điện thoại của khách hàng theo tên truyền vào
+CREATE PROCEDURE SP_TimTB_KhachHang
+	@ten NVARCHAR(100)
 AS 
-SELECT * FROM dbo.ThueBao
-WHERE MaTB = (
-SELECT MaTB FROM dbo.SoThueBao
-WHERE SoTB = '0326459773'
-)
+SELECT SoTB FROM dbo.SoThueBao
+JOIN dbo.ThueBao
+ON ThueBao.MaTB = SoThueBao.MaTB
+WHERE TenTB = @ten
+GO
+
+EXECUTE dbo.SP_TimTB_KhachHang  @ten = N'Vũ Viết Quý' -- nvarchar(100)
+GO
+
+--SP_ThemTB: Thêm mới một thuê bao cho khách hàng
+CREATE PROCEDURE SP_ThemTB
+	@MaTB INT ,
+	@SoTB CHAR(15),
+	@LoaiTB INT
+AS
+BEGIN
+	IF (@MaTB IS NOT NULL AND @SoTB IS NOT NULL AND ISNUMERIC(@SoTB) = 1 AND @LoaiTB = 0 OR @LoaiTB =1)
+	INSERT INTO dbo.SoThueBao
+	(
+	    MaTB,
+	    SoTB,
+	    LoaiTB,
+	    NgayDK
+	)
+	VALUES
+	(   @MaTB,        -- MaTB - int
+	    @SoTB,       -- SoTB - char(15)
+	    @LoaiTB,        -- LoaiTB - int
+	    GETDATE() -- NgayDK - date
+	    )
+END
 GO
 
 
-CREATE VIEW SP_TimTB_KhachHang
-AS 
+EXEC dbo.SP_ThemTB @MaTB = 1,  -- int
+                   @SoTB = '03264597', -- char(13)
+                   @LoaiTB = 0 -- int
 SELECT * FROM dbo.SoThueBao
-WHERE MaTB = (
-SELECT MaTB FROM dbo.ThueBao
-WHERE TenTB = 'Vũ Viết Quý'
-)
+GO
+--SP_HuyTB_MaKH: Xóa bỏ thuê bao của khách hàng theo Mã khách hàng
+CREATE PROCEDURE SP_HuyTB_MaKH
+	@MaTB INT,
+	@SoTB CHAR(15)
+AS
+DELETE FROM dbo.SoThueBao
+WHERE MaTB = @MaTB AND SoTB = @SoTB
+GO
+
+EXEC dbo.SP_HuyTB_MaKH @MaTB = 3, -- int
+                       @SoTB = '0326459773' -- char(15)
+GO
+
+
+
+
+
+
 
 
 

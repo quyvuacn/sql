@@ -175,5 +175,77 @@ JOIN dbo.SanPham
 ON SanPham.MaSP = PhuTrach.MaSP
 GO
 
+--8c: SP_Them_LoaiSP: Thêm mới một loại sản phẩm
+CREATE PROCEDURE SP_Them_LoaiSP
+	@MaloaiSP INT,
+	@TenLoaiSP NVARCHAR(50)
+AS
+BEGIN
+	IF (@MaloaiSP IS NOT NULL AND @TenLoaiSP IS NOT NULL)
+	INSERT INTO dbo.LoaiSP
+	(
+	    MaloaiSP,
+	    TenLoaiSP
+	)
+	VALUES
+	(   @MaloaiSP,  -- MaloaiSP - int
+	    @TenLoaiSP -- TenLoaiSP - nvarchar(100)
+	    )
+END
+GO
+
+--SP_Them_NCTN: Thêm mới người chịu trách nhiệm
+CREATE PROCEDURE SP_Them_NCTN
+	@TenNV NVARCHAR(100)
+AS
+BEGIN
+	IF (@TenNV IS NOT NULL)
+	INSERT INTO dbo.NhanVien
+	(
+	    TenNV
+	)
+	VALUES
+	(@TenNV -- TenNV - nvarchar(100)
+	    )
+END
+GO
+
+--SP_Them_SanPham: Thêm mới một sản phẩm
+CREATE PROCEDURE SP_Them_SanPham
+	@MaSP INT,
+	@TenSP NVARCHAR(100),
+	@MaLoaiSP INT,
+	@PB INT
+AS
+BEGIN 
+	IF(@MaSP IS NOT NULL AND @TenSP IS NOT NULL AND @MaLoaiSP IS NOT NULL)
+	INSERT INTO dbo.SanPham
+	(
+	    TenSP,
+	    MaLoaiSP,
+	    PhienBan
+	)
+	VALUES
+	(   @TenSP, -- TenSP - nvarchar(100)
+	    @MaLoaiSP,   -- MaLoaiSP - int
+	    @PB   -- PhienBan - int
+	    )
+END
+GO
+
+--SP_Xoa_SanPham: Xóa một sản phẩm theo mã sản phẩm
+CREATE PROCEDURE SP_Xoa_SanPham
+	@MaSP INT
+AS
+DELETE FROM dbo.SanPham
+WHERE MaSP = @MaSP
+GO
+--SP_Xoa_SanPham_TheoLoai: Xóa các sản phẩm của một loại nào đó
+CREATE PROCEDURE SP_Xoa_SanPham_TheoLoai
+	@MaLoaiSP INT
+AS
+DELETE FROM dbo.SanPham
+WHERE MaLoaiSP = @MaLoaiSP
+GO
 
 

@@ -297,3 +297,44 @@ JOIN dbo.OrderDetails
 ON OrderDetails.OrderID = ProductOrder.OrderID
 JOIN dbo.Product
 ON Product.ProductID = OrderDetails.ProductID
+GO
+
+--8c.Xây dựng thủ tục lưu trữ sau
+--SP_TimKH_MaKH: Tìm khách hàng theo mã khách hàng
+CREATE PROCEDURE SP_TimKH_MaKH
+	@CustomerID INT
+AS
+SELECT * FROM dbo.Customer
+WHERE CustomerID = @CustomerID
+GO
+
+EXECUTE dbo.SP_TimKH_MaKH @CustomerID = 0 -- int
+GO
+
+--SP_TimKH_MaHD: Tìm thông tin khách hàng theo mã hóa đơn
+CREATE PROCEDURE SP_TimKH_MaHD
+	@OrderID INT
+AS
+SELECT Customer.CustomerID,CustomerName,Address,Tel,Customer.Status FROM dbo.ProductOrder
+JOIN dbo.Customer 
+ON Customer.CustomerID = ProductOrder.CustomerID
+WHERE dbo.ProductOrder.OrderID = @OrderID
+GO
+
+EXECUTE dbo.SP_TimKH_MaHD @OrderID = 0 -- int
+GO
+
+--SP_SanPham_MaKH: Liệt kê các sản phẩm được mua bởi khách hàng có mã được truyền vào Store.
+CREATE PROCEDURE SP_SanPham_MaKH
+	@CustumerID INT
+AS 
+SELECT Name FROM dbo.OrderDetails
+JOIN dbo.ProductOrder
+ON ProductOrder.OrderID = OrderDetails.OrderID
+JOIN dbo.Product
+ON Product.ProductID = OrderDetails.ProductID
+WHERE CustomerID = @CustumerID
+GO
+
+EXECUTE dbo.SP_SanPham_MaKH @CustumerID = 3 -- int
+GO
