@@ -243,6 +243,13 @@ ON Mark.RollNo = Student.RollNo
 GROUP BY FullName
 HAVING COUNT(DISTINCT SubjectCode) >=2
 GO
+--3: Tạo khung nhìn sinh viên trượt ít nhất 1 môn
+CREATE  VIEW Truot
+AS 
+SELECT DISTINCT Mark.RollNo,FullName FROM dbo.Mark
+JOIN dbo.Student
+ON Student.RollNo = Mark.RollNo
+WHERE WMark < 8 OR PMark < 6
 
 --4. Tạo một khung nhìn chứa danh sách các sinh viên đang học ở TimeSlot G.
 CREATE VIEW Test_04
