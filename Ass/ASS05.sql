@@ -5,7 +5,7 @@ USE ASS05
 GO
 
 CREATE TABLE Info(
-	UID INT IDENTITY PRIMARY KEY,
+	UID INT PRIMARY KEY,
 	Name NVARCHAR(100) NOT NULL,
 	DateOfBirth DATE
 )
@@ -18,15 +18,17 @@ CREATE TABLE Tel(
 GO
 
 INSERT INTO dbo.Info
-(
+(	UID,
     Name,
     DateOfBirth
 )
 VALUES
-(   N'Vũ Viết Quý',      -- Name - nvarchar(100)
+(   1,
+	N'Vũ Viết Quý',      -- Name - nvarchar(100)
     '20030109' -- DateOfBirth - date
     ),
-(   N'Nguyễn Văn An',      -- Name - nvarchar(100)
+(   2,
+	N'Nguyễn Văn An',      -- Name - nvarchar(100)
     '20030109' -- DateOfBirth - date
     )
 
@@ -119,6 +121,7 @@ GO
 --8c
 --SP_Them_DanhBa: Thêm một người mới vào danh bạn
 CREATE PROCEDURE SP_Them_DanhBa
+	@UID INT,
 	@Name NVARCHAR(100),
 	@DateOfBirth DATE,
 	@Tel CHAR(15)
@@ -127,12 +130,13 @@ BEGIN
 	IF (@UID IS NOT NULL AND @Name IS NOT NULL AND @Tel IS NOT NULL)
 	BEGIN
 	INSERT INTO dbo.Info
-	(
+	(	UID,
 	    Name,
 	    DateOfBirth
 	)
 	VALUES
-	(  @Name,      -- Name - nvarchar(100)
+	(	@UID,
+		@Name,      -- Name - nvarchar(100)
 	    @DateOfBirth -- DateOfBirth - date
 	    )
 	INSERT INTO dbo.Tel
@@ -142,13 +146,22 @@ BEGIN
 	    Contact
 	)
 	VALUES
-	(   0,        -- UID - int
-	    '',       -- Tel - char(10)
+	(   @UID,        -- UID - int
+	    '123456',       -- Tel - char(10)
 	    GETDATE() -- Contact - date
 	    )
-
 	END
-
-
 END
+GO
 
+--SP_Tim_DanhBa: Tìm thông tin liên hệ của một người theo tên (gần đúng)
+CREATE PROCEDURE SP_Tim_DanhBa
+ @like_name NVARCHAR(50)
+AS
+SELECT Name,Tel FROM dbo.Tel
+JOIN dbo.Info
+ON Info.UID = Tel.UID
+WHERE Name LIKE '%' + @like_name + '%'
+GO
+
+EXECUTE dbo.SP_Tim_DanhBa  @like_name = N'Vũ' -- varchar(50)
