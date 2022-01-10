@@ -207,9 +207,66 @@ ON dbo.TacGia.Ma_TG = ThongTinSach.Ma_TG
 JOIN dbo.NXB
 ON NXB.Ma_NXB = dbo.ThongTinSach.Ma_NXB
 GO
+--18 Viết Store Procedure:
+--SP_Them_Sach: thêm mới một cuốn sách
+CREATE PROCEDURE SP_Them_Sach
+	@Ma_NXB INT ,
+	@Ma_TG INT ,
+	@Ma_Sach INT ,
+	@Ten_Sach NVARCHAR(100)  ,
+	@MaLoai INT ,
+	@NamXB DATE ,
+	@LanXB INT ,
+	@Gia MONEY ,
+	@SL INT 
+AS 
+IF (@Ma_NXB IS NOT NULL AND @Ma_TG IS NOT NULL AND @Ten_Sach IS NOT NULL)
+INSERT INTO dbo.ThongTinSach
+(
+    Ma_NXB,
+    Ma_TG,
+    TenSach,
+    Ma_Loai,
+    NamXB,
+    LanXB,
+    Gia,
+    SL
+)
+VALUES
+(   @Ma_NXB,         -- Ma_NXB - int
+    @Ma_TG,         -- Ma_TG - int
+    @Ten_Sach,       -- TenSach - nvarchar(200)
+    @MaLoai,         -- Ma_Loai - int
+    @NamXB, -- NamXB - date
+    @LanXB,         -- LanXB - int
+    @Gia,      -- Gia - money
+    @SL          -- SL - int
+    )
+GO
 
+--SP_Tim_Sach: Tìm các cuốn sách theo từ khóa
+CREATE PROCEDURE SP_Tim_Sach
+	@key NVARCHAR(50)
+AS
+SELECT TenSach,TenTG,NXB FROM dbo.NXB
+JOIN dbo.ThongTinSach
+ON ThongTinSach.Ma_NXB = NXB.Ma_NXB
+JOIN dbo.TacGia 
+ON TacGia.Ma_TG = ThongTinSach.Ma_TG
+WHERE 
+	TenSach LIKE '%' + @key +'%' OR
+	TenTG LIKE '%' + @key +'%' OR
+	NXB LIKE '%' + @key +'%'
+ORDER BY TenSach,TenTG,NXB
 
+EXECUTE dbo.SP_Tim_Sach  @key = N'h' -- nvarchar(50)
+GO
 
-
-
-
+--SP_Sach_ChuyenMuc:Liệt kê các cuốn sách theo mã chuyên mục
+CREATE PROCEDURE SP_Sach_ChuyenMuc
+	@key NVARCHAR(100)
+AS
+SELECT * FROM dbo.ThongTinSach
+JOIN dbo.LoaiSach
+ON LoaiSach.Ma_Loai = ThongTinSach.Ma_Loai
+WHERE LoaiSach LIKE '%' + @key +'%'
