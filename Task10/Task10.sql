@@ -1,4 +1,6 @@
-﻿CREATE DATABASE Task10_Ex
+﻿DROP DATABASE IF EXISTS Task10_Ex
+
+CREATE DATABASE Task10_Ex
 GO
 
 USE Task10_Ex
@@ -100,4 +102,68 @@ SELECT OBJECT_DEFINITION (OBJECT_ID(N'QtyOnHand')) AS [Object Definition]
 
 --2. Viết câu lệnh hiển thị các đối tượng phụ thuộc của mỗi thủ tục lưu trữ trên
 EXEC sys.sp_depends @objname = N'QtyOnHand' 
+GO
 --3. Chỉnh sửa PriceIncreasevà QtyOnHandthêm câu lệnh cho phép hiển thị giá trị mới đã được cập nhật của các trường (UnitPrice,QtyOnHand).
+ALTER PROCEDURE dbo.PriceIncrease
+AS
+BEGIN
+UPDATE dbo.Toys
+SET UnitPrice = UnitPrice + 10
+SELECT Name,UnitPrice AS UnitPrice_New  FROM dbo.Toys
+END
+GO
+
+ALTER PROCEDURE dbo.QtyOnHand
+AS
+BEGIN
+UPDATE dbo.Toys
+SET QtyOnHand = QtyOnHand - 5
+SELECT Name,QtyOnHand AS QtyOnHand_new FROM dbo.Toys
+END
+GO
+
+--4 Viết câu lệnh tạo thủ tục lưu trữ có tên là SpecificPriceIncrease thực hiện cộng thêm tổng số sản
+--phẩm (giá trị trường QtyOnHand)vào giá của sản phẩm đồ chơi tương ứng.
+CREATE PROCEDURE SpecificPriceIncrease
+AS
+UPDATE dbo.Toys
+SET UnitPrice = UnitPrice + QtyOnHand
+GO
+
+--5 Chỉnh sửa thủ tục lưu trữ SpecificPriceIncrease cho thêm tính năng trả lại tổng số các bản ghi
+--được cập nhật.
+ALTER PROCEDURE dbo.SpecificPriceIncrease
+AS
+DECLARE @return INT 
+BEGIN
+	UPDATE dbo.Toys
+	SET UnitPrice = UnitPrice + QtyOnHand
+	SELECT @return = COUNT(QtyOnHand) FROM dbo.Toys
+	RETURN @return
+END
+GO
+
+DECLARE @return INT
+EXECUTE dbo.SpecificPriceIncrease @return = @return OUTPUT
+PRINT @return
+GO
+
+--6 Chỉnh sửa thủ tục lưu trữ SpecificPriceIncrease cho phép gọi thủ tục HeavyToys bên trong nó
+ALTER PROCEDURE dbo.SpecificPriceIncrease
+AS
+DECLARE @return INT
+BEGIN
+	UPDATE dbo.Toys
+	SET UnitPrice = UnitPrice + QtyOnHand
+	SELECT @return = COUNT(QtyOnHand) FROM dbo.Toys
+	EXEC dbo.HeavyToys
+	RETURN @return
+END
+GO
+
+DROP PROCEDURE dbo.SpecificPriceIncrease,dbo.HeavyToys,dbo.QtyOnHand,dbo.PriceIncrease
+
+
+
+
+
