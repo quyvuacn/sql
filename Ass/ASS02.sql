@@ -1,4 +1,8 @@
-﻿CREATE DATABASE ASS02 -- Cơ sở dữ liệu lưu trữ sản phẩm theo hãng
+﻿DROP DATABASE IF EXISTS ASS02
+GO
+
+
+CREATE DATABASE ASS02 -- Cơ sở dữ liệu lưu trữ sản phẩm theo hãng
 GO
 
 USE ASS02
@@ -27,7 +31,7 @@ CREATE TABLE Product(
 	Status NVARCHAR(100) NOT NULL, --Chất lượng? Độ hot
 	Unit NVARCHAR(20) NOT NULL , -- Đơn vị: chiếc,lô,...
 	Price MONEY NOT NULL CHECK(Price>0),
-	Quantily INT NOT NULL CHECK(Quantily>0),
+	Quantily INT NOT NULL,
 )
 GO
 
@@ -84,7 +88,16 @@ VALUES
     N'Chiếc',  -- Unit - nvarchar(20)
     1500, -- Price - money
     20     -- Quantily - int
+    ),
+(   1,
+	1,    -- TypeID - int
+    N'Điện Thoại',  -- ProductName - nvarchar(200)
+    N'Hàng mới',  -- Status - nvarchar(100)
+    N'Chiếc',  -- Unit - nvarchar(20)
+    1500, -- Price - money
+    20     -- Quantily - int
     )
+
 
 --4: Hiển thị các hãng và các sp
 SELECT TrademarkName FROM dbo.Trademark
@@ -179,7 +192,31 @@ GO
 EXECUTE dbo.SP_SanPham_HetHang 
 GO
 
+--8d: 
+--TG_Xoa_Hang: Ngăn không cho xóa hãng
+CREATE TRIGGER TG_Xoa_Hang
+ON dbo.Trademark
+FOR DELETE
+AS
+BEGIN
+	ROLLBACK TRANSACTION
+	PRINT N'Không thể xóa hãng'
+END
+GO
+--TG_Xoa_SanPham: Chỉ cho phép xóa các sản phẩm đã hết hàng (số lượng = 0)
+ALTER TRIGGER TG_Xoa_SanPham
+ON dbo.Product
+FOR DELETE
+AS
+BEGIN	
 
+END
+GO
+
+SELECT * FROM dbo.Product
+
+DELETE dbo.Product
+WHERE ProductID = 20
 
 
 
